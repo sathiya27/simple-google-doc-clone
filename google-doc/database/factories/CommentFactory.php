@@ -15,6 +15,9 @@ class CommentFactory extends Factory
     {
         return [
             //
+            'body'=>[],
+            'user_id'=>1,
+            'post_id'=>1,
         ];
     }
 }
