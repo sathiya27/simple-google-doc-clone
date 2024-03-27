@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
-use Database\Seeders\Traits\ForeignKeyChecks;
-use Database\Seeders\Traits\TruncateTable;
-use Illuminate\Database\Seeder;
 use App\Models\Post;
+use App\Models\User;
+use Illuminate\Database\Seeder;
+use Database\Seeders\Traits\TruncateTable;
+use Database\Factories\Helpers\FactoryHelper;
+use Database\Seeders\Traits\ForeignKeyChecks;
 
 class PostSeeder extends Seeder
 {
@@ -23,9 +25,13 @@ class PostSeeder extends Seeder
         $this->disableForeignKey();
 
         $this->truncate('posts');
-        Post::factory(3)->state([
+        $posts = Post::factory(3)->state([
             'title'=>'untitled'
         ])->create();
+
+        $posts->each(function (Post $post){
+            $post->users()->sync([FactoryHelper::getRandomModelId(User::class)]);
+        });
 
         $this->enableForeignKey();
     }
