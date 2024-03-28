@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Request;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
 
@@ -15,7 +17,9 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+        return new JsonResponse([
+            'data'=> Comment::all(),
+        ]);
     }
 
     /**
@@ -24,9 +28,11 @@ class CommentController extends Controller
      * @param  \App\Http\Requests\StoreCommentRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCommentRequest $request)
+    public function store(Request $request)
     {
-        //
+        return new JsonResponse([
+            'data'=>'Comment created',
+        ]);
     }
 
     /**
@@ -37,7 +43,9 @@ class CommentController extends Controller
      */
     public function show(Comment $comment)
     {
-        //
+        return new JsonResponse([
+            'data'=>$comment,
+        ]);
     }
 
     /**
@@ -47,9 +55,11 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCommentRequest $request, Comment $comment)
+    public function update(Request $request, Comment $comment)
     {
-        //
+        return new JsonResponse([
+            'data'=>$comment,
+        ]);
     }
 
     /**
@@ -60,6 +70,8 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        //
+        return new JsonResponse([
+            'data'=>'Comment deleted',
+        ]);
     }
 }
