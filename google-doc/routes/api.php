@@ -1,8 +1,6 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,9 +15,14 @@ use Illuminate\Support\Facades\Route;
 */
 Route::prefix('v1') // This includes 'v1' name in routes uri automatically, run php artisan route:list and see result under URI collumn
     ->group(function () {
-        require __DIR__.'/api/v1/users.php';
+
+        // call class to require routes recursively
+        \App\Helper\Routes\RouteHelper::includeRoutes(__DIR__ . '/api/v1');
+
+        // this are requiring the files one by one
+        /* require __DIR__.'/api/v1/users.php';
         require __DIR__.'/api/v1/posts.php';
-        require __DIR__.'/api/v1/comments.php';
+        require __DIR__.'/api/v1/comments.php'; */
     });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
