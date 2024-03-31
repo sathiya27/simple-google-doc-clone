@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
-use Database\Seeders\Traits\ForeignKeyChecks;
-use Database\Seeders\Traits\TruncateTable;
+use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
+use Database\Seeders\Traits\TruncateTable;
+use Database\Seeders\Traits\ForeignKeyChecks;
 
 class UserSeeder extends Seeder
 {
@@ -19,7 +21,16 @@ class UserSeeder extends Seeder
     {
         $this->disableForeignKey();
         $this->truncate('users');
-        \App\Models\User::factory(10)->create();
+
+        User::query()->create([
+            'name' => 'Sheen Beenu',
+            'email' => 'SheenTheBeenQueen@gmail.com',
+            'email_verified_at' => now(),
+            'password' => 'SheenBB', // password
+            'remember_token' => Str::random(10),
+        ]);
+
+        User::factory(10)->create();
         $this->enableForeignKey();
     }
 }

@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Route;
 //Route::apiResource('users', App\Http\Controllers\UserController::class);
 
 Route::group([
-    'middleware'=> [
+   /*  'middleware'=> [
         'auth',
-    ],
+    ], */
     'prefix'=> 'randName',
     'as'=> 'users.',
     'namaspace'=> 'App\Http\Controllers',
