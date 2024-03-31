@@ -13,12 +13,13 @@ class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     *@param Request $request
      * @return CommentResource
      */
-    public function index()
+    public function index(Request $request)
     {
-        $comments = Comment::query()->get();
+        $page_size = $request->page_size;
+        $comments = Comment::query()->paginate($page_size);
 
         return CommentResource::collection($comments);
     }

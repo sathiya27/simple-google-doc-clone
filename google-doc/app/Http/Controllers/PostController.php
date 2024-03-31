@@ -17,11 +17,13 @@ class PostController extends Controller
      *
      * @return ResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
 
+        $pageSize = $request->page_size ?? 20;
+
         // $post = Post::query()->where('id', '=', '3')->get();  // to get a specific resource by id, can add multiple where()
-        $posts = Post::query()->get();
+        $posts = Post::query()->paginate($pageSize);
         return PostResource::collection($posts);
     }
 
