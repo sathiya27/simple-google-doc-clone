@@ -4,6 +4,10 @@ namespace App\Repositories;
 
 use App\Models\Post;
 use Illuminate\Support\Facades\DB;
+use App\Exceptions\GeneralJsonError;
+use App\Exceptions\CreateModelException;
+use App\Exceptions\DeleteModelException;
+use App\Exceptions\UpdateModelException;
 
 class PostRepository extends BaseRepository
 {
@@ -14,7 +18,7 @@ class PostRepository extends BaseRepository
                 'title'=> data_get($attributes, 'title', 'untitled'),
                 'body'=> data_get($attributes, 'body'),
             ]);
-
+            throw_if(!$created, CreateModelException::class, 'Failed to create Model');
             $created->users()->sync(data_get($attributes, 'user_ids')); // --------------------------------> second DB operation
 
             return $created;
@@ -29,10 +33,8 @@ class PostRepository extends BaseRepository
                 'title'=> data_get($attributes, 'title', $post->title),
                 'body'=> data_get($attributes, 'body', $post->body),
             ]);
-    
-            if(!$updated){
-                throw new \Exception("Failed to update post");
-            }
+
+            throw_if(!$updated, UpdateModelException::class, 'Failed to update Post');
     
             if($userIds = data_get($attributes, 'user_ids')){
                 $post->users()->sync($userIds);
@@ -47,9 +49,7 @@ class PostRepository extends BaseRepository
         return DB::transaction(function () use( $post){
             $deleted = $post->forceDelete();
 
-            if(!$deleted){
-                throw new \Exception("Failed to delete post");
-            }
+            throw_if(!$deleted, DeleteModelException::class, 'Failed to delete Post');
 
             return $deleted;
         });

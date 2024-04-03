@@ -1,9 +1,13 @@
 <?php 
 
 namespace App\Repositories;
-use App\Models\User;
+
 use Exception;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Exceptions\CreateModelException;
+use App\Exceptions\DeleteModelException;
+use App\Exceptions\UpdateModelException;
 
 class UserRepository extends BaseRepository
 {
@@ -15,8 +19,9 @@ class UserRepository extends BaseRepository
             'name'=>data_get($attributes, 'name'),
             'email'=>data_get($attributes, 'email'),
             'password'=>data_get($attributes, 'password')
-    
         ]);
+        throw_if(!$user, CreateModelException::class, 'Failed to create User');
+        
         return $user;
     });
 
@@ -31,9 +36,7 @@ public function update(array $attributes, $user)
             'password'=>data_get($attributes, 'password', $user->password)
         ]);
     
-        if(!$updated){
-            throw new \Exception("Failed to udpated resource.");
-        }
+        throw_if(!$updated, UpdateModelException::class, 'failed to update User');
     
         return $user;
     });
@@ -43,9 +46,7 @@ public function forceDelete($user)
 {
     return DB::transaction(function () use ($user){
         $deleted = $user->forceDelete();
-        if(!$deleted){
-            throw new \Exception("Failed to deleted User");
-        }
+        throw_if(!$deleted, DeleteModelException::class, 'Failed to delete User');
     
         return $deleted;
     });

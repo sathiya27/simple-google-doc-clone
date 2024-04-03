@@ -2,8 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\CreateModelException;
 use App\Models\Comment;
 use Illuminate\Support\Facades\DB;
+use App\Exceptions\DeleteModelException;
+use App\Exceptions\UpdateModelException;
 
 class CommentRepository extends BaseRepository
 {
@@ -16,7 +19,7 @@ class CommentRepository extends BaseRepository
                 'user_id'=>data_get($attributes, 'user_id'),
                 'post_id'=>data_get($attributes, 'post_id')
             ]);
-
+            throw_if(!$created, CreateModelException::class, 'Failed to create comment');
             return $created;
         });
     }
@@ -30,9 +33,7 @@ class CommentRepository extends BaseRepository
                 'post_id'=>data_get($attributes, 'post_id', $comment->post_id)
             ]);
     
-            if(!$updated){
-                throw new \Exception('Failed to update comment');
-            }
+            throw_if(!$updated, UpdateModelException::class, 'Failed to update comment');
     
             return $comment;
         });
@@ -43,9 +44,7 @@ class CommentRepository extends BaseRepository
         return DB::transaction(function () use ($comment){
             $deleted = $comment->forceDelete();
     
-            if(!$deleted){
-                throw new \Exception("Failed to delete comment");
-            }
+            throw_if(!$deleted, DeleteModelException::class, 'Failed to delete Comment');
     
             return $deleted;
         });

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\GeneralJsonError;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\PostResource;
 use App\Repositories\PostRepository;
+use Exception;
 
 class PostController extends Controller
 {
@@ -18,7 +20,7 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-
+        
         $pageSize = $request->page_size ?? 20;
 
         // $post = Post::query()->where('id', '=', '3')->get();  // to get a specific resource by id, can add multiple where()
