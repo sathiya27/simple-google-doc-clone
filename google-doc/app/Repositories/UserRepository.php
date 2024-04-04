@@ -5,6 +5,9 @@ namespace App\Repositories;
 use Exception;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Events\Models\User\UserCreated;
+use App\Events\Models\User\UserDeleted;
+use App\Events\Models\User\UserUpdated;
 use App\Exceptions\CreateModelException;
 use App\Exceptions\DeleteModelException;
 use App\Exceptions\UpdateModelException;
@@ -21,7 +24,7 @@ class UserRepository extends BaseRepository
             'password'=>data_get($attributes, 'password')
         ]);
         throw_if(!$user, CreateModelException::class, 'Failed to create User');
-        
+        event(new UserCreated($user));
         return $user;
     });
 
@@ -37,7 +40,7 @@ public function update(array $attributes, $user)
         ]);
     
         throw_if(!$updated, UpdateModelException::class, 'failed to update User');
-    
+        event(new UserUpdated($user));
         return $user;
     });
 }
@@ -47,7 +50,7 @@ public function forceDelete($user)
     return DB::transaction(function () use ($user){
         $deleted = $user->forceDelete();
         throw_if(!$deleted, DeleteModelException::class, 'Failed to delete User');
-    
+        event(new UserDeleted());
         return $deleted;
     });
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Events\UserCreated;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Resources\UserResource;
