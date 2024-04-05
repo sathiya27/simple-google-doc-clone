@@ -8,20 +8,20 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class WelcomeMail extends Mailable
+class GoodByeMail extends Mailable
 {
     use Queueable, SerializesModels;
-
-    private $user;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+
+    public $userName;
+    public function __construct(String $userName)
     {
-        $this->user = $user;
+        $this->userName=$userName;
     }
 
     /**
@@ -32,10 +32,9 @@ class WelcomeMail extends Mailable
     public function build()
     {
         return $this
-        ->subject("Welcome to the amazing LivePost")
-        ->markdown('mail.welcome-mail', [
-            'name'=>$this->user->name,
-            'email'=>$this->user->email
+        ->subject('Farewell '.$this->userName)
+        ->markdown('mail.goodbye-mail',[
+            'name'=>$this->userName,
         ]);
     }
 }

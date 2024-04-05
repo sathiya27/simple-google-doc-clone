@@ -2,8 +2,9 @@
 
 namespace App\Listeners\Models\User;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SendGoodbyeEmail
 {
@@ -25,6 +26,7 @@ class SendGoodbyeEmail
      */
     public function handle($event)
     {
-        dump("Sent goodbye email");
+        Mail::to($event->userEmail)
+        ->send(new \App\Mail\GoodByeMail($event->userName));
     }
 }

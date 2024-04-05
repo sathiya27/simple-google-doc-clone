@@ -1,27 +1,26 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\Models\Comment;
 
-use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class WelcomeMail extends Mailable
+class CommentCreatedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    private $user;
-
+    private $comment;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(Comment $comment)
     {
-        $this->user = $user;
+        $this->comment = $comment;
     }
 
     /**
@@ -32,10 +31,10 @@ class WelcomeMail extends Mailable
     public function build()
     {
         return $this
-        ->subject("Welcome to the amazing LivePost")
-        ->markdown('mail.welcome-mail', [
-            'name'=>$this->user->name,
-            'email'=>$this->user->email
+        ->subject("Comment created")
+        ->markdown('Mail.Models.Comment.CommentCreated-mail', [
+            'post_name'=>$this->comment->post->title,
+            'username'=>$this->comment->user->name,
         ]);
     }
 }

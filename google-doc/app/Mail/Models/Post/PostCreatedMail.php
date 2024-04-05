@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\Models\Post;
 
-use App\Models\User;
+use App\Models\Post;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class WelcomeMail extends Mailable
+class PostCreatedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    private $user;
+    private $post;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(Post $post)
     {
-        $this->user = $user;
+        $this->post = $post;
     }
 
     /**
@@ -32,10 +32,9 @@ class WelcomeMail extends Mailable
     public function build()
     {
         return $this
-        ->subject("Welcome to the amazing LivePost")
-        ->markdown('mail.welcome-mail', [
-            'name'=>$this->user->name,
-            'email'=>$this->user->email
+        ->subject('Post Created')
+        ->markdown('Mail.Models.Post.PostCreated-mail', [
+            'post_name'=>$this->post->title,
         ]);
     }
 }

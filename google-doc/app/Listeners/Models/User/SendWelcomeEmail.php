@@ -2,8 +2,10 @@
 
 namespace App\Listeners\Models\User;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SendWelcomeEmail
 {
@@ -25,6 +27,7 @@ class SendWelcomeEmail
      */
     public function handle($event)
     {
-        dump('email sent');
+        Mail::to($event->user)
+        ->send(new \App\Mail\WelcomeMail($event->user));
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Listeners\Models\Comment;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\InteractsWithQueue;
+use App\Mail\Models\Comment\CommentCreatedMail;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SendCommentCreated
 {
@@ -25,6 +27,7 @@ class SendCommentCreated
      */
     public function handle($event)
     {
-        dump("Sent Comment created email");
+        Mail::to($event->comment->user)
+        ->send(new CommentCreatedMail($event->comment));
     }
 }

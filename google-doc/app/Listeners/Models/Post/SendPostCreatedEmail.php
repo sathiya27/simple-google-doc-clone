@@ -2,8 +2,9 @@
 
 namespace App\Listeners\Models\Post;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SendPostCreatedEmail
 {
@@ -25,6 +26,7 @@ class SendPostCreatedEmail
      */
     public function handle($event)
     {
-        dump("Sent post created email");
+        Mail::to($event->post->users)
+            ->send(new \App\Mail\Models\Post\PostCreatedMail());
     }
 }

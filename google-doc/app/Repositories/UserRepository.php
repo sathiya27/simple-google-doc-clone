@@ -49,8 +49,10 @@ public function forceDelete($user)
 {
     return DB::transaction(function () use ($user){
         $deleted = $user->forceDelete();
+        $userName = $user->name;
+        $userEmail = $user->email;
         throw_if(!$deleted, DeleteModelException::class, 'Failed to delete User');
-        event(new UserDeleted());
+        event(new UserDeleted($userName, $userEmail));
         return $deleted;
     });
 }
